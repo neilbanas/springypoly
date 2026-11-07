@@ -13,11 +13,9 @@ let colors = [];
 
 // "Frutiger-Roman-48.vlw" in the original. A .vlw font can't be used in a browser (and
 // Frutiger is commercial), so use Frutiger if it's installed locally, otherwise a near match.
-// No spaces allowed: p5 1.x quotes any font name containing whitespace, which would turn
-// this whole list into a single (nonexistent) family name.
 const FONT = "Frutiger,Helvetica,Arial,sans-serif";
 
-let app;  // the Canvas object ("canvas" in the original; renamed to avoid clashing with p5/DOM names)
+let app;  // the Canvas object
 
 function setup() {
   // colours are created here, not at top level: p5 functions don't exist until setup()
@@ -95,8 +93,6 @@ function fitSize() {
 }
 
 // Ctrl (or Cmd on a Mac) held during a click toggles whether a dot is pinned.
-// Replaces Processing's keyCode==CONTROL / keyCode==157 test; reading the modifier from the
-// mouse event itself avoids "stuck" keys when the window loses focus.
 function modifierHeld(event) {
   return !!(event && (event.ctrlKey || event.metaKey));
 }

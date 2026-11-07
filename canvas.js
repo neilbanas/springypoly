@@ -96,7 +96,7 @@ class SketchCanvas {
     } else if (key=='g') {
       this.showGUI = !this.showGUI;
     }
-    // ('e', save every frame, is dropped in the port)
+    // ('e', save every frame, is dropped in the port to p5.js)
   }
 
   // Vector export: redraw the network (no GUI) into an offscreen SVG buffer at the logical
@@ -106,9 +106,19 @@ class SketchCanvas {
     pg.textFont(FONT);
     pg.background(bkgndColor);
     this.S.draw(pg);
-    save(pg, "springypoly-" + nf(frameCount, 5) + ".svg");
-    setTimeout(() => pg.remove(), 1000);  // let the download start before discarding the buffer
+    const svgText = new XMLSerializer().serializeToString(pg._renderer.svg);
+    pg.remove();
+ 
+    const url = URL.createObjectURL(new Blob([svgText], {type: "image/svg+xml"}));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "springypoly-" + nf(frameCount, 5) + ".svg";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);  // let the download start first
   }
+
 
   // rebuilt every frame, as in the original (it's cheap now that arrays aren't preallocated);
   // keeping it between frames would let its one-polygon physics evolve
